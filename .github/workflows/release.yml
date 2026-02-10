@@ -1,0 +1,67 @@
+name: Release Application
+
+on:
+  push:
+    tags:
+      - 'v*' # Trigger on tags like v1.0, v2.0.1, etc.
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    name: Build & Release
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            artifact_name: library-system-windows.exe
+            asset_name: library-system-windows.exe
+          - os: ubuntu-latest
+            artifact_name: library-system-linux
+            asset_name: library-system-linux
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+
+    # Install System Libs for Linux Build
+    - name: Install System Dependencies (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libegl1 libxkbcommon-x11-0 libdbus-1-3 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 libxcb-xinput0 libxcb-xfixes0
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pyinstaller
+
+    - name: Build with PyInstaller (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        pyinstaller --noconfirm --onefile --windowed --name "LibrarySystem" --add-data "library_system/assets;library_system/assets" main_app.py
+        # Rename dist/LibrarySystem.exe to custom name
+        mv dist/LibrarySystem.exe dist/${{ matrix.artifact_name }}
+
+    - name: Build with PyInstaller (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        pyinstaller --noconfirm --onefile --windowed --name "LibrarySystem" --add-data "library_system/assets:library_system/assets" main_app.py
+        # Rename dist/LibrarySystem to custom name
+        mv dist/LibrarySystem dist/${{ matrix.artifact_name }}
+
+    - name: Upload Release Asset
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: dist/${{ matrix.artifact_name }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

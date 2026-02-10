@@ -62,3 +62,20 @@ Setelah proses build selesai (centang hijau):
 ## ⚠️ Catatan Penting
 - **Database**: File `library.db` tidak disertakan dalam build. Aplikasi akan otomatis membuat database baru saat pertama kali dijalankan di komputer pengguna.
 - **Assets**: Pastikan file aset (gambar/ikon) ada di dalam folder `library_system/assets` agar ikut ter-build.
+
+---
+
+## 📦 Otomatisasi Release (v1.0, v2.0, dll)
+
+Untuk membuat **GitHub Release** resmi beserta file binary yang siap didownload secara publik:
+
+1. Buat **Tag** baru di git (misal `v1.0`):
+   ```bash
+   git tag v1.0
+   git push origin v1.0
+   ```
+2. GitHub Actions akan otomatis:
+   - Membuat Release baru dengan judul "v1.0".
+   - Membuild aplikasi untuk Windows & Linux.
+   - Mengupload file `.exe` dan binary ke halaman Releases.
+
