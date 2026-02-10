@@ -1,0 +1,15 @@
+[project]
+name = "sistem-manajemen-perpustakaan"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "customtkinter>=5.2.2",
+    "ipdb>=0.13.13",
+    "matplotlib>=3.10.8",
+    "pandas>=2.3.3",
+    "pillow>=12.1.0",
+    "pyside6>=6.10.2",
+    "tabulate>=0.9.0",
+]
