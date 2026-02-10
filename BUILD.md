@@ -63,6 +63,20 @@ Setelah proses build selesai (centang hijau):
 - **Database**: File `library.db` tidak disertakan dalam build. Aplikasi akan otomatis membuat database baru saat pertama kali dijalankan di komputer pengguna.
 - **Assets**: Pastikan file aset (gambar/ikon) ada di dalam folder `library_system/assets` agar ikut ter-build.
 
+## 🛠️ Troubleshooting
+
+### Linux: Permission Denied
+Jika Anda mengalami error `Permission denied` saat menjalankan binary di Linux:
+1. Buka terminal.
+2. Berikan izin eksekusi:
+   ```bash
+   chmod +x library-system-linux
+   ```
+3. Jalankan kembali:
+   ```bash
+   ./library-system-linux
+   ```
+
 ---
 
 ## 📦 Otomatisasi Release (v1.0, v2.0, dll)
