@@ -2,5 +2,8 @@
 # == Requirements.txt ==
 # ==========================
 
-# CLI
+# GUI Framework
+PySide6>=6.6.0
+
+# CLI (if still used)
 rich>=13.7.0
